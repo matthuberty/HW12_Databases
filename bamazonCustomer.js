@@ -16,11 +16,37 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(function (err) {
-    if (err) {
-        console.log(err);
-    }
-    runSearch();
+    if (err) throw err;
+    console.log("Connected as ID:  " + connection.threadId + "\n");
+    //Call a variety of functions, depending upon what you want to do
+    //runSearch();
+    //createProduct();
+    start();
 });
+
+function start(){
+    var questions = {
+        name: "idOrQuantity", 
+        type: "rawlist",
+        message: "Would you like to enter an [ID] or [QUANTITY] for an item to purchase?", 
+        choices: ["ID", "QUANTITY", "EXIT"]
+    };
+
+    inquirer.prompt(questions).then(function(answer){
+        //based on the user's answer, either enter the ID or quantity of the item they'd like to purchase
+        if(answer.idOrQuantity.toUpperCase() === "ID"){
+            idAction();
+        }
+        else if(answer.idOrQuantity.toUpperCase() === "POST"){
+            postAction();
+        }
+        else{
+            //Exit the application
+            connection.end();
+            return;
+        }
+    });
+}
 
 function runSearch() {
     inquirer
@@ -35,21 +61,28 @@ function runSearch() {
         })
         .then(function (answer) {
             switch (answer.action) {
-                case "Find songs by artist":
+                case "Enter the ID of the product I wish to purchase":
                     artistSearch();
                     break;
 
-                case "Find all artists who appear more than once":
+                case "Enter the number of units of the product I wish to purchase":
                     multiSearch();
-                    break;
-
-                case "Find data within a specific range":
-                    rangeSearch();
-                    break;
-
-                case "Search for a specific song":
-                    songSearch();
                     break;
             }
         });
+}
+
+function createProduct(){
+    //This function adds a product to the product table in the bamazon database
+    console.log("Inserting a new product ...\n");
+    var query = connection.query(
+        "INSERT INTO products SET ?",
+        {
+            product_name: "Whisk",              //VARCHAR(45) NULL,
+            department_name: "Kitchen&Bath",    //VARCHAR(45) NULL,
+            price: 7.99,                        //FLOAT (11,2) NULL,
+            stock_quantity: 22                  //INT (11)
+        }
+    )
+    connection.end();
 }
