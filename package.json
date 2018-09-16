@@ -1,0 +1,19 @@
+{
+  "name": "hw12_databases",
+  "version": "1.0.0",
+  "description": "Database application",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthuberty/HW12_Databases.git"
+  },
+  "author": "Matthew J. Huberty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matthuberty/HW12_Databases/issues"
+  },
+  "homepage": "https://github.com/matthuberty/HW12_Databases#readme"
+}
